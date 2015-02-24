@@ -1,0 +1,10 @@
+﻿@model IEnumerable<string>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+@foreach (var item in Model) {
+   <p> @item </p>
+}

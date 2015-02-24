@@ -15,7 +15,21 @@ namespace Website.Controllers
     public class RoleController : Controller
     {
         // GET: Role
+        /// <summary>
+        /// Get list of roles for current user
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
+        {
+
+           var results = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().GetRoles(User.Identity.GetUserId());
+
+
+            return View(results);
+        }
+
+
+        public ActionResult Add()
         {
             IdentityDbContext idContext = new IdentityDbContext();
             idContext.Roles.AddOrUpdate(r => r.Name, new IdentityRole() { Name = "Admin" }
@@ -24,11 +38,12 @@ namespace Website.Controllers
 
             ApplicationDbContext appContext = new ApplicationDbContext();
             ApplicationUser user = appContext.Users.Where(u => u.UserName.Equals("jp@me.com", StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-         
-            Request.GetOwinContext().GetUserManager<ApplicationUserManager>().AddToRole(user.Id, "Admin"); 
+
+            Request.GetOwinContext().GetUserManager<ApplicationUserManager>().AddToRole(user.Id, "Admin");
             appContext.SaveChanges();
 
             return View();
+
         }
     }
 }
